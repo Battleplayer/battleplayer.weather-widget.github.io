@@ -5,11 +5,13 @@ import SingleCity from '../components/SingleCity';
 class CitiesContainer extends Component {
     state = {
         lng: '',
-        lat: ''
+        lat: '',
+        loaded: false,
+        error:true,
+        mycity: {}
     };
     url = 'http://api.openweathermap.org/data/2.5/weather';
-    apiID='3476f426c6d8f97027e143c1f5b3b21e';
-    // api.openweathermap.org/data/2.5/weather?lat=35&lon=139
+    apiID = '3476f426c6d8f97027e143c1f5b3b21e';
     displayLocationInfo = (position) => {
         this.setState({
             lng: position.coords.longitude.toFixed(2),
@@ -18,39 +20,42 @@ class CitiesContainer extends Component {
     };
     getCoords = async () => {
         const {lat, lng} = this.state;
-        let res = await axios.get(`${this.url}?lat=${lat}&lon=${lng}&APPID=${this.apiID}`);
-        // let res = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&APPID=3476f426c6d8f97027e143c1f5b3b21e`);
-        let { data } = await res.data;
-        this.setState({ users: data });
+        axios.get(`${this.url}?lat=${lat}&lon=${lng}&APPID=${this.apiID}`)
+            .then( (response) => {
+                console.log(response);
+                this.setState({mycity: response.data, loaded: true});
+            })
+            .catch( (error) => {
+                // this.setState({error: error.request.status, loaded: true});
+                console.log(error);
+            })
     };
-    componentDidMount() {
-        navigator.geolocation.getCurrentPosition(this.displayLocationInfo);
-        // const {lat, lng} = this.state;
-        // axios.get(`${this.url}?lat=${lat}&lon=${lng}`)
-        //     .then(function (response) {
-        //         // handle success
-        //         console.log(response);
-        //     })
-        //     .catch(function (error) {
-        //         // handle error
-        //         console.log(error);
-        //     })
-    }
-    componentDidUpdate(prevState){
-        if (this.state !== prevState) {
-            this.getCoords();
 
+    componentDidMount() {
+        this.setState({error: false});
+        navigator.geolocation.getCurrentPosition(this.displayLocationInfo);
+    }
+
+
+    componentDidUpdate() {
+        if (this.state.loaded === false ) {
+            this.getCoords();
+            console.log('load');
         }
     }
 
     render() {
-        return (
-            <div>
-                <p>longitude: {this.state.lat}</p>
-                <p>latitude: {this.state.lng}</p>
-                <SingleCity/>
-            </div>
-        )
+        // if (!this.state.error && this.state.error === '400' ) {
+
+            return (
+                <div>
+                    <p>longitude: {this.state.lat}</p>
+                    <p>latitude: {this.state.lng}</p>
+                    <SingleCity city={this.state.mycity}/>
+                </div>
+            )
+        // }
+        // return(<div>Cannot load city, error {this.state.error}</div>)
     }
 }
 

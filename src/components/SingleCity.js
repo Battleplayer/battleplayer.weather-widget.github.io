@@ -1,6 +1,6 @@
 import React from 'react';
-import {Table, Spinner, Button} from 'react-bootstrap'
-import './SingleCity.css';
+import {Table, Spinner, Button} from 'react-bootstrap';
+
 
 const SingleCity = ({city, addToFavorite, removeFromFavorite}) => {
     let sunrise = '';
@@ -29,6 +29,7 @@ const SingleCity = ({city, addToFavorite, removeFromFavorite}) => {
             <div className='single'>
                 <h2>{city.name}</h2>
                 <img src={`http://openweathermap.org/img/w/${city.weather[0].icon}.png`} alt="weather"/>
+                <p style={{textAlign:"center"}}>{city.weather[0].description}</p>
                 <Table striped bordered hover>
                     <tbody>
                     <tr>
@@ -57,7 +58,7 @@ const SingleCity = ({city, addToFavorite, removeFromFavorite}) => {
                     </tr>
                     <tr>
                         <td>Wind:</td>
-                        <td>direction{city.wind.deg}, <br/>speed {city.wind.speed} m/s</td>
+                        <td>direction {city.wind.deg}, <br/>speed {city.wind.speed} m/s</td>
                     </tr>
                     <tr>
                         <td>Coordinates:</td>
@@ -71,7 +72,7 @@ const SingleCity = ({city, addToFavorite, removeFromFavorite}) => {
                 }
                 {
                     removeFromFavorite ?
-                        <Button variant="danger" onClick={() => removeFromFavorite(city)}>Remove favorite</Button> : null
+                        <Button variant="danger" onClick={() => removeFromFavorite(city)}>Remove from favorite</Button> : null
                 }
             </div>
         )

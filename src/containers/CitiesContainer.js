@@ -9,7 +9,8 @@ class CitiesContainer extends Component {
     state = {
         lng: '',
         lat: '',
-        defaultCity: {}
+        defaultCity: {},
+        added: false
     };
 
     displayLocationInfo = (position) => {
@@ -31,27 +32,47 @@ class CitiesContainer extends Component {
         }
     }
 
-    checkCity = city => {
-        let cities = this.props.cities;
-        let is = 0;
-        for (let i = 0; i < cities.length; i++) {
-            is = 0;
-            if (cities[i].id !== city.id) is = is + 1;
+    pushToArray = (city) => {
+        let arr = this.props.cities;
+        const index = arr.findIndex((e) => e.id === city.id);
+
+        if (index === -1) {
+            this.props.addToFavorite(city);
+        } else {
+            arr[index] = city;
+            this.setState({added: true});
+            setTimeout(() => {
+                this.setState({added: false})
+            }, 4000)
         }
-        if (is > 0 || !cities.length) this.props.addToFavorite(city);
     };
 
     render() {
-        console.log(this.props);
         return (
             <Container>
                 <Row>
                     {
-                        this.props.error ?
-                            <Alert variant="danger">
-                                Cannot load city, "{this.props.error}" using saved data
+                        this.state.added ?
+                            <Alert variant="success">
+                                This city has been already added to favorite!
                             </Alert> : null
                     }
+                    {
+                        this.props.error ?
+                            <Alert variant="danger">
+                                {
+                                    (this.props.error === 'Request failed with status code 404') ?
+                                        <span>Error, wrong city code using saved data.</span>
+                                        : null
+                                }
+                                {
+                                    (this.props.error === 'Request failed with status code 429') ?
+                                        <span>You are using free tariff, try again in one minute.</span>
+                                        : null
+                                }
+                            </Alert> : null
+                    }
+
                     <Col className="flexes">
                         <h2>Weather in your city</h2>
                         <SingleCity city={this.props.defaultCity}/>
@@ -61,21 +82,26 @@ class CitiesContainer extends Component {
                             <Col className="flexes">
                                 <h2>Searched city</h2>
                                 <SingleCity city={this.props.searchedCity}
-                                            addToFavorite={this.checkCity}
-                                    // addToFavorite={this.props.addToFavorite}
+                                            addToFavorite={this.pushToArray}
                                 />
                             </Col>
                             : null
                     }
                 </Row>
-                <Row>
-                    {this.props.cities.map((city, index) =>
-                        <SingleCity key={index}
-                                    city={city}
-                                    removeFromFavorite={this.props.removeFromFavorite}
-                        />
-                    )}
-                </Row>
+                {
+                    this.props.cities.length ?
+
+                        <Row>
+                            <h2>Favorite cities</h2>
+                            {this.props.cities.map((city, index) =>
+                                <SingleCity key={index}
+                                            city={city}
+                                            removeFromFavorite={this.props.removeFromFavorite}
+                                />
+                            )}
+                        </Row>
+                        : null
+                }
             </Container>
         )
     }

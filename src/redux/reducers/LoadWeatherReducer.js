@@ -15,6 +15,7 @@ export default function (state = defaultState, {type = '', payload = {}}) {
             return {
                 ...state,
                 error:'',
+                searchedCity: {},
                 isRequestInProgress: true
             };
         case actionTypes.GET_DEFAULT_CITY_COORDS_REQ_SUCCESS:

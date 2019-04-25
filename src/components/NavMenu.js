@@ -15,13 +15,13 @@ class NavMenu extends Component {
 
     searchNewCity = e => {
         e.preventDefault();
-        console.log(this.state.search);
         this.props.getSearchedCity(this.state.search);
+        this.setState({search: ''})
     };
 
     render() {
         return (
-            <Navbar bg="light">
+            <Navbar bg="info">
                 <Navbar.Brand>My weather app</Navbar.Brand>
                 <Form inline onSubmit={this.searchNewCity}>
                     <FormControl type="text"
@@ -29,18 +29,18 @@ class NavMenu extends Component {
                                  className="mr-sm-2"
                                  onChange={this.search}
                                  value={this.state.search}/>
-                    <Button type="submit" variant="outline-success">Search</Button>
+                    <Button type="submit" variant="success">Search</Button>
                 </Form>
             </Navbar>
         )
     }
 }
 
-const mapStateToProps = ({ isRequestInProgress, error, searchedCity}) => ({
-     isRequestInProgress, error, searchedCity
+const mapStateToProps = ({isRequestInProgress, error, searchedCity}) => ({
+    isRequestInProgress, error, searchedCity
 });
 const mapDispatchToProps = dispatcher =>
-    bindActionCreators({ getSearchedCity}, dispatcher);
+    bindActionCreators({getSearchedCity}, dispatcher);
 
 export default connect(mapStateToProps,
     mapDispatchToProps

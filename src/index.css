@@ -13,7 +13,7 @@ code {
     monospace;
 }
 
-.alert-danger {
+.alert {
   width: 100%;
   margin-top: 20px;
 }
@@ -21,4 +21,34 @@ code {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+h2{
+  text-align: center;
+  width: 100%;
+  margin-top: 30px;
+}
+.navbar .navbar-brand {
+  flex-grow: 1;
+}
+.single{
+  display: flex;
+  flex-direction: column;
+  border: 2px solid lightgray;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+.single h2 {
+  text-align: center;
+}
+.single img {
+  max-width: 100%;
+  align-self: center;
+}
+.single table{
+  border-radius: 5px;
+}
+.single table td:nth-child(2){
+  font-weight: 700;
+  text-align: center;
 }

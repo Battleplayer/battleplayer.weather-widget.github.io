@@ -1,62 +1,103 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import SingleCity from '../components/SingleCity';
+import {Container, Row, Alert, Col} from 'react-bootstrap';
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {getDefaultCity, addToFavorite, removeFromFavorite} from "../redux/actions/LoadWeatherAction";
 
 class CitiesContainer extends Component {
     state = {
         lng: '',
         lat: '',
-        loaded: false,
-        error:true,
-        mycity: {}
+        defaultCity: {}
     };
-    url = 'http://api.openweathermap.org/data/2.5/weather';
-    apiID = '3476f426c6d8f97027e143c1f5b3b21e';
+
     displayLocationInfo = (position) => {
         this.setState({
             lng: position.coords.longitude.toFixed(2),
             lat: position.coords.latitude.toFixed(2)
         });
     };
-    getCoords = async () => {
-        const {lat, lng} = this.state;
-        axios.get(`${this.url}?lat=${lat}&lon=${lng}&APPID=${this.apiID}`)
-            .then( (response) => {
-                console.log(response);
-                this.setState({mycity: response.data, loaded: true});
-            })
-            .catch( (error) => {
-                // this.setState({error: error.request.status, loaded: true});
-                console.log(error);
-            })
-    };
 
     componentDidMount() {
-        this.setState({error: false});
         navigator.geolocation.getCurrentPosition(this.displayLocationInfo);
     }
 
-
     componentDidUpdate() {
-        if (this.state.loaded === false ) {
-            this.getCoords();
-            console.log('load');
+        const {lat, lng} = this.state;
+        if (this.props.isRequestInProgress === false && lat && lng && !Object.keys(this.state.defaultCity).length) {
+            this.props.getDefaultCity(lat, lng);
+            this.setState({defaultCity: this.props.defaultCity});
         }
     }
 
-    render() {
-        // if (!this.state.error && this.state.error === '400' ) {
+    checkCity = city => {
+        let cities = this.props.cities;
+        let is = 0;
+        for (let i = 0; i < cities.length; i++) {
+            is = 0;
+            if (cities[i].id !== city.id) is = is + 1;
+        }
+        if (is > 0 || !cities.length) this.props.addToFavorite(city);
+    };
 
-            return (
-                <div>
-                    <p>longitude: {this.state.lat}</p>
-                    <p>latitude: {this.state.lng}</p>
-                    <SingleCity city={this.state.mycity}/>
-                </div>
-            )
-        // }
-        // return(<div>Cannot load city, error {this.state.error}</div>)
+    render() {
+        console.log(this.props);
+        return (
+            <Container>
+                <Row>
+                    {
+                        this.props.error ?
+                            <Alert variant="danger">
+                                Cannot load city, "{this.props.error}" using saved data
+                            </Alert> : null
+                    }
+                    <Col className="flexes">
+                        <h2>Weather in your city</h2>
+                        <SingleCity city={this.props.defaultCity}/>
+                    </Col>
+                    {
+                        Object.keys(this.props.searchedCity).length ?
+                            <Col className="flexes">
+                                <h2>Searched city</h2>
+                                <SingleCity city={this.props.searchedCity}
+                                            addToFavorite={this.checkCity}
+                                    // addToFavorite={this.props.addToFavorite}
+                                />
+                            </Col>
+                            : null
+                    }
+                </Row>
+                <Row>
+                    {this.props.cities.map((city, index) =>
+                        <SingleCity key={index}
+                                    city={city}
+                                    removeFromFavorite={this.props.removeFromFavorite}
+                        />
+                    )}
+                </Row>
+            </Container>
+        )
     }
 }
 
-export default CitiesContainer;
+const mapStateToProps = ({defaultCity, isRequestInProgress, error, searchedCity, cities}) => ({
+    defaultCity,
+    isRequestInProgress,
+    error,
+    searchedCity,
+    cities
+});
+const mapDispatchToProps = dispatcher =>
+    bindActionCreators({
+        getDefaultCity,
+        addToFavorite,
+        removeFromFavorite
+    }, dispatcher);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CitiesContainer);
+
+

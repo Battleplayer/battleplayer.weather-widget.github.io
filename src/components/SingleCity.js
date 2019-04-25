@@ -1,6 +1,8 @@
 import React from 'react';
+import {Table, Spinner, Button} from 'react-bootstrap'
+import './SingleCity.css';
 
-const SingleCity = ({city}) => {
+const SingleCity = ({city, addToFavorite, removeFromFavorite}) => {
     let sunrise = '';
     let sunset = '';
     let todayIs = '';
@@ -21,22 +23,60 @@ const SingleCity = ({city}) => {
             sunset = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
         })();
     }
-    console.log(city);
+
     if (city && Object.keys(city).length) {
         return (
             <div className='single'>
-                <p>Name: {city.name}</p>
-                <p>Coordinate:</p>
-                <p>Latitude {city.coord.lat}</p>
-                <p>Date now {todayIs}</p>
-                <p>longitude {city.coord.lng}</p>
-                <p>Country {city.sys.country}</p>
-                <p>Sunrise {sunrise}</p>
-                <p>Sunset {sunset}</p>
+                <h2>{city.name}</h2>
+                <img src={`http://openweathermap.org/img/w/${city.weather[0].icon}.png`} alt="weather"/>
+                <Table striped bordered hover>
+                    <tbody>
+                    <tr>
+                        <td>t&deg; </td>
+                        <td>{(city.main.temp - 273.15).toFixed(0)} &#8451;</td>
+                    </tr>
+                    <tr>
+                        <td>Country:</td>
+                        <td>{city.sys.country}</td>
+                    </tr>
+                    <tr>
+                        <td>Date now:</td>
+                        <td>{todayIs}</td>
+                    </tr>
+                    <tr>
+                        <td>Sunrise:</td>
+                        <td>{sunrise}</td>
+                    </tr>
+                    <tr>
+                        <td>Sunset:</td>
+                        <td>{sunset}</td>
+                    </tr>
+                    <tr>
+                        <td>Humidity:</td>
+                        <td>{city.main.humidity}%</td>
+                    </tr>
+                    <tr>
+                        <td>Wind:</td>
+                        <td>direction{city.wind.deg}, <br/>speed {city.wind.speed} m/s</td>
+                    </tr>
+                    <tr>
+                        <td>Coordinates:</td>
+                        <td>{city.coord.lat}, {city.coord.lon}</td>
+                    </tr>
+                    </tbody>
+                </Table>
+                {
+                    addToFavorite ?
+                        <Button onClick={() => addToFavorite(city)}>Add to favorite</Button> : null
+                }
+                {
+                    removeFromFavorite ?
+                        <Button variant="danger" onClick={() => removeFromFavorite(city)}>Remove favorite</Button> : null
+                }
             </div>
         )
     }
-    return (<div>cant load data</div>)
+    return (<Spinner animation="grow"/>)
 };
 
 export default SingleCity;

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Navbar, Form, FormControl, Button} from 'react-bootstrap';
+import {NavLink} from 'react-router-dom';
 import {getSearchedCity} from "../redux/actions/LoadWeatherAction";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -22,7 +23,11 @@ class NavMenu extends Component {
     render() {
         return (
             <Navbar bg="info">
-                <Navbar.Brand>My weather app</Navbar.Brand>
+                <Navbar.Brand>
+                    <NavLink to="/">
+                        My weather app
+                    </NavLink>
+                </Navbar.Brand>
                 <Form inline onSubmit={this.searchNewCity}>
                     <FormControl type="text"
                                  placeholder="Search city by name"

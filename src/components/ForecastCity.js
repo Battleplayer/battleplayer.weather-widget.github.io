@@ -41,7 +41,7 @@ class ForecastCity extends Component {
                             <h5>
                                 {(city.main.temp - 273.15).toFixed(0)}&#8451;
                             </h5>
-                            <img src={`http://openweathermap.org/img/w/${city.weather[0].icon}.png`} alt="weather"/>
+                            <img src={`https://openweathermap.org/img/w/${city.weather[0].icon}.png`} alt="weather"/>
                             <p>
                                 {city.weather[0].description}
                             </p>

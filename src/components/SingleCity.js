@@ -25,11 +25,10 @@ const SingleCity = ({city, addToFavorite, removeFromFavorite}) => {
     }
 
     if (city && Object.keys(city).length) {
-        console.log(city);
         return (
             <div className='single'>
                 <h2>{city.name}</h2>
-                <img src={`http://openweathermap.org/img/w/${city.weather[0].icon}.png`} alt="weather"/>
+                <img src={`https://openweathermap.org/img/w/${city.weather[0].icon}.png`} alt="weather"/>
                 <p style={{textAlign: "center"}}>{city.weather[0].description}</p>
                 <Table striped bordered hover>
                     <tbody>

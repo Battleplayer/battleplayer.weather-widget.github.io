@@ -14,7 +14,7 @@ export const actionTypes = {
     FORECAST_FIVEDAYS_REQ_ERROR: 'FORECAST_FIVEDAYS_REQ_ERROR'
 };
 
-let _url = 'http://api.openweathermap.org/data/2.5';
+let _url = 'https://api.openweathermap.org/data/2.5';
 let myValue = '3476f426c6d8f97027e143c1f5b3b21e';
 
 

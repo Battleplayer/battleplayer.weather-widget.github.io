@@ -5,11 +5,12 @@ const defaultState = {
     error: false,
     defaultCity: {},
     searchedCity: {},
-    cities: []
+    cities: [],
+    forecast5city: {}
 };
 
 export default function (state = defaultState, {type = '', payload = {}}) {
-    const {defaultCity, searchedCity, error, city} = payload;
+    const {defaultCity, searchedCity, error, city, forecast5city} = payload;
     switch (type) {
         case actionTypes.GET_DEFAULT_CITY_COORDS_REQ_START:
             return {
@@ -59,6 +60,24 @@ export default function (state = defaultState, {type = '', payload = {}}) {
                 cities: state.cities.filter(c =>
                     c.id !== city.id
                 ),
+            };
+        case actionTypes.FORECAST_FIVEDAYS_REQ_START:
+            return {
+                ...state,
+                error:'',
+                isRequestInProgress: true
+            };
+        case actionTypes.FORECAST_FIVEDAYS_REQ_SUCCESS:
+            return {
+                ...state,
+                forecast5city,
+                isRequestInProgress: false,
+            };
+        case actionTypes.FORECAST_FIVEDAYS_REQ_ERROR:
+            return {
+                ...state,
+                error,
+                isRequestInProgress: false,
             };
 
         default:

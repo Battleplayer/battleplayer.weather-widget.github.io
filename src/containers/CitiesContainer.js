@@ -4,6 +4,8 @@ import {Container, Row, Alert, Col} from 'react-bootstrap';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {getDefaultCity, addToFavorite, removeFromFavorite} from "../redux/actions/LoadWeatherAction";
+import DetailForecastContainer from './DetailForecastContainer';
+
 
 class CitiesContainer extends Component {
     state = {
@@ -35,7 +37,6 @@ class CitiesContainer extends Component {
     pushToArray = (city) => {
         let arr = this.props.cities;
         const index = arr.findIndex((e) => e.id === city.id);
-
         if (index === -1) {
             this.props.addToFavorite(city);
         } else {
@@ -61,6 +62,11 @@ class CitiesContainer extends Component {
                         this.props.error ?
                             <Alert variant="danger">
                                 {
+                                    (this.props.error === 'Request failed with status code 401') ?
+                                        <span>Bad access key.</span>
+                                        : null
+                                }
+                                {
                                     (this.props.error === 'Request failed with status code 404') ?
                                         <span>Error, wrong city code using saved data.</span>
                                         : null
@@ -75,7 +81,8 @@ class CitiesContainer extends Component {
 
                     <Col className="flexes">
                         <h2>Weather in your city</h2>
-                        <SingleCity city={this.props.defaultCity}/>
+                        <SingleCity city={this.props.defaultCity}
+                                    getForecastCity={this.props.getForecastCity}/>
                     </Col>
                     {
                         Object.keys(this.props.searchedCity).length ?
@@ -90,29 +97,36 @@ class CitiesContainer extends Component {
                 </Row>
                 {
                     this.props.cities.length ?
-
                         <Row>
-                            <h2>Favorite cities</h2>
-                            {this.props.cities.map((city, index) =>
-                                <SingleCity key={index}
-                                            city={city}
-                                            removeFromFavorite={this.props.removeFromFavorite}
-                                />
+                            <Col md={12}>
+                                <h2>Favorite cities</h2>
+                            </Col>
+                            {this.props.cities.map((city) =>
+                                <Col md={4} key={city.id}>
+                                    <SingleCity
+                                        city={city}
+                                        removeFromFavorite={this.props.removeFromFavorite}
+                                    />
+                                </Col>
                             )}
                         </Row>
                         : null
                 }
+                <Col md={12}>
+                    <DetailForecastContainer/>
+                </Col>
             </Container>
         )
     }
 }
 
-const mapStateToProps = ({defaultCity, isRequestInProgress, error, searchedCity, cities}) => ({
+const mapStateToProps = ({defaultCity, isRequestInProgress, error, searchedCity, cities, forecast5city}) => ({
     defaultCity,
     isRequestInProgress,
     error,
     searchedCity,
-    cities
+    cities,
+    forecast5city
 });
 const mapDispatchToProps = dispatcher =>
     bindActionCreators({

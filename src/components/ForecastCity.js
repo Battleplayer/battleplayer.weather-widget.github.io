@@ -30,7 +30,7 @@ class ForecastCity extends Component {
         const {forecast5city} = this.props;
         return (
             <>
-                {!forecast5city ? <Spinner/> : <h2>Forecast for 5 day for city {forecast5city.city.name}</h2>}
+                {!Object.keys(forecast5city).length ? <Spinner/> : <h2>Forecast for 5 day for city {forecast5city.city.name}</h2>}
                 <Slider {...settings}
                         className='forecast'>
                     {forecast5city.list.map(city =>

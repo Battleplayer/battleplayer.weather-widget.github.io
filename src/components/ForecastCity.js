@@ -28,44 +28,45 @@ class ForecastCity extends Component {
             slidesToScroll: 5
         };
         const {forecast5city} = this.props;
-        return (
-            <>
-                {Object.keys(forecast5city).length > 0 ? 
-                 <>
-                 <h2>Forecast for 5 day for city {forecast5city.city.name}</h2>}
-                  <Slider {...settings}
-                        className='forecast'>
-                    {forecast5city.list.map(city =>
-                        (<div key={city.dt} className="forecast__item">
-                            <h4>
-                                {new Date(city.dt * 1000).toLocaleString().replace(/:[^:]*$/, '')}
-                            </h4>
-                            <h5>
-                                {(city.main.temp - 273.15).toFixed(0)}&#8451;
-                            </h5>
-                            <img src={`https://openweathermap.org/img/w/${city.weather[0].icon}.png`} alt="weather"/>
-                            <p>
-                                {city.weather[0].description}
-                            </p>
-                        </div>)
-                    )}
-                </Slider>
-                </>
-            :<Spinner/> 
-            </>
-        )
+        if (Object.keys(forecast5city).length) {
+            return (
+                <div>
+                    <h2>Forecast for 5 day for city {forecast5city.city.name}</h2>
+                    <Slider {...settings}
+                            className='forecast'>
+                        {forecast5city.list.map(city =>
+                            (<div key={city.dt} className="forecast__item">
+                                <h4>
+                                    {new Date(city.dt * 1000).toLocaleString().replace(/:[^:]*$/, '')}
+                                </h4>
+                                <h5>
+                                    {(city.main.temp - 273.15).toFixed(0)}&#8451;
+                                </h5>
+                                <img src={`https://openweathermap.org/img/w/${city.weather[0].icon}.png`}
+                                     alt="weather"/>
+                                <p>
+                                    {city.weather[0].description}
+                                </p>
+                            </div>)
+                        )}
+                    </Slider>
+                </div>
+            )
+        } else {
+            return (<Spinner/>)
+        }
     }
 }
 
-const mapStateToProps = ({forecast5city}) => ({
-    forecast5city
-});
-const mapDispatchToProps = dispatcher =>
-    bindActionCreators({getForecastCity}, dispatcher);
+const
+    mapStateToProps = ({forecast5city}) => ({
+        forecast5city
+    });
+const
+    mapDispatchToProps = dispatcher =>
+        bindActionCreators({getForecastCity}, dispatcher);
 
 export default withRouter(
-    connect(
-        mapStateToProps,
-        mapDispatchToProps
-    )(ForecastCity)
-);
+    connect(mapStateToProps, mapDispatchToProps)(
+        ForecastCity
+    ));

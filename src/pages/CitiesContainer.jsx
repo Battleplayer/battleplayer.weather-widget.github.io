@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import SingleCity from '../components/SingleCity';
 import { Container, Row, Alert, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import ForecastCity from '../components/ForecastCity';
 import { getDefaultCity } from '../api/CityInfo';
 import { addToFavorite, removeFromFavorite } from '../redux/actions/LoadWeatherAction';
+import ForecastCity from 'components/ForecastCity';
+import SingleCity from 'components/SingleCity';
 
 class CitiesContainer extends Component {
   state = {

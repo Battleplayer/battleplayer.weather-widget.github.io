@@ -35,6 +35,7 @@ export const getSearchedCity = (name) => async (dispatch) => {
 };
 
 export const getForecastCity = (id) => async (dispatch) => {
+  if (!id) return;
   dispatch(requestForecast5City());
   await Api.client
     .get(`/forecast?id=${id}`)

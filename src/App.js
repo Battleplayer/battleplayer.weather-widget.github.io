@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
-import './App.css';
-import CitiesContainer from 'pages/CitiesContainer';
 import NavMenu from 'components/NavMenu';
+import CitiesContainer from 'pages/CitiesContainer';
+
+import './App.css';
 
 const App = () => {
   return (

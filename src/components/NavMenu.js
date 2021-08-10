@@ -1,55 +1,40 @@
-import React, { Component } from 'react';
-import { Navbar, Form, FormControl, Button } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
-import { getSearchedCity } from '../redux/actions/LoadWeatherAction';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, { memo, useCallback, useState } from 'react';
+import { Button, Form, FormControl, Navbar } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { getSearchedCity } from 'api/CityInfo';
 
-class NavMenu extends Component {
-	state = {
-		search: '',
-	};
-	search = e => {
-		this.setState({ search: e.target.value });
-	};
+const NavMenu = memo((props) => {
+  const [searchCity, setSearchCity] = useState('');
+  const dispatch = useDispatch();
 
-	searchNewCity = e => {
-		e.preventDefault();
-		this.props.getSearchedCity(this.state.search);
-		this.setState({ search: '' });
-	};
+  const search = useCallback((e) => setSearchCity(e.target.value), []);
 
-	render() {
-		return (
-			<Navbar bg="info">
-				<Navbar.Brand>
-					<NavLink to="/">My weather app</NavLink>
-				</Navbar.Brand>
-				<Form inline onSubmit={this.searchNewCity}>
-					<FormControl
-						type="text"
-						placeholder="Search city by name"
-						className="mr-sm-2"
-						onChange={this.search}
-						value={this.state.search}
-					/>
-					<Button type="submit" variant="success">
-						Search
-					</Button>
-				</Form>
-			</Navbar>
-		);
-	}
-}
+  const searchNewCity = useCallback(
+    (e) => {
+      e.preventDefault();
+      dispatch(getSearchedCity(searchCity));
+      setSearchCity('');
+    },
+    [dispatch, searchCity]
+  );
 
-const mapStateToProps = ({ isRequestInProgress, error, searchedCity }) => ({
-	isRequestInProgress,
-	error,
-	searchedCity,
+  return (
+    <Navbar bg="dark" variant="dark">
+      <Navbar.Brand>My weather app</Navbar.Brand>
+      <Form inline onSubmit={searchNewCity}>
+        <FormControl
+          type="text"
+          placeholder="Search city by name"
+          className="mr-sm-2"
+          onChange={search}
+          value={searchCity}
+        />
+        <Button type="submit" variant="success">
+          Search
+        </Button>
+      </Form>
+    </Navbar>
+  );
 });
-const mapDispatchToProps = dispatcher => bindActionCreators({ getSearchedCity }, dispatcher);
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(NavMenu);
+export default NavMenu;

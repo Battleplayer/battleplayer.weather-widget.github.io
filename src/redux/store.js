@@ -7,8 +7,8 @@ import citiesState from './reducers/LoadWeatherReducer';
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const persistConfig = {
-	key: 'root',
-	storage,
+  key: 'root',
+  storage,
 };
 
 const persistedReducer = persistReducer(persistConfig, citiesState);

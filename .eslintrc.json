@@ -1,0 +1,54 @@
+{
+	"root": true,
+	"extends": [
+		"react-app",
+		"plugin:prettier/recommended"
+	],
+
+	"globals": {
+		"$": true,
+		"ADM": true
+	},
+	"plugins": ["react", "prettier"],
+	"parser": "babel-eslint",
+	"rules": {
+		"prettier/prettier": "warn",
+		"import/no-unresolved": "off",
+		"import/no-duplicates": "off",
+		"import/no-extraneous-dependencies": "off",
+		"react/jsx-filename-extension": ["warn", { "extensions": [".js", ".jsx"] }],
+
+		"no-tabs": "warn",
+//		"quotes": 0,
+		     "quotes": [2, "single", { "avoidEscape": true }],
+		"eol-last": "off",
+		"spaced-comment": "warn",
+		"no-unused-vars": "warn",
+		"no-else-return": "warn",
+		"prefer-rest-params": "warn",
+		"max-len": ["warn", { "code": 120 }],
+		"no-param-reassign": ["warn", { "props": false }],
+		"curly": "off",
+		"indent": "off",
+		"no-shadow": "off",
+		"object-shorthand": "off",
+		"arrow-body-style": "off",
+		"no-underscore-dangle": "off",
+		"prefer-object-spread": "off",
+		"no-return-assign": "off",
+		"no-confusing-arrow": "off",
+		"consistent-return": "off",
+		"global-require": "off",
+
+		//   // react jsx
+		"react/jsx-no-bind": "off",
+		"react/jsx-boolean-value": "off",
+		"react/jsx-indent": "off",
+		"react/jsx-fragments": ["warn", "element"]
+	},
+	"parserOptions": {
+		"ecmaFeatures": {
+			"jsx": true
+		}
+	}
+}

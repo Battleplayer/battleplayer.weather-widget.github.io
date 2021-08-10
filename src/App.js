@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import './App.css';
-import CitiesContainer from './containers/CitiesContainer';
-import NavMenu from './components/NavMenu';
+import CitiesContainer from 'pages/CitiesContainer';
+import NavMenu from 'components/NavMenu';
 
-function App() {
-	return (
-		<div>
-			<NavMenu />
-			<CitiesContainer />
-		</div>
-	);
-}
+const App = () => {
+  return (
+    <Fragment>
+      <NavMenu />
+      <CitiesContainer />
+    </Fragment>
+  );
+};
 
 export default App;

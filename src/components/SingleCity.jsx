@@ -2,6 +2,8 @@ import React, { Fragment, memo, useCallback, useMemo } from 'react';
 import { Button, Spinner, Table } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import getWeatherImage from 'helpers/weatherImage';
+import getHumanTime from 'helpers/humanTime';
 
 const SingleCity = memo((props) => {
   const { city, addToFavorite, removeFromFavorite } = props;
@@ -9,31 +11,24 @@ const SingleCity = memo((props) => {
   const dispatch = useDispatch();
 
   const { sys, main, wind, coord, id, weather, name } = city;
-  const { country, sunrise } = sys;
+  const { country, sunrise, sunset } = sys;
 
-  const date = useMemo(() => new Date(sunrise * 1000), [sunrise]);
-  const todayIs = useMemo(() => date.toLocaleDateString(), [date]);
+  const dateSunRise = useMemo(() => new Date(sunrise * 1000), [sunrise]);
+  const dateSunSet = useMemo(() => new Date(sunset * 1000), [sunset]);
+  const todayIs = useMemo(() => new Date().toLocaleDateString(), []);
 
-  let sunRise = '';
-  let sunSet = '';
-
-  if (city && Object.keys(city).length) {
-    let hours = date.getHours();
-    let minutes = '0' + date.getMinutes();
-    let seconds = '0' + date.getSeconds();
-    sunRise = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-    sunSet = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-  }
+  const sunRise = useMemo(() => getHumanTime(dateSunRise), [dateSunRise]);
+  const sunSet = useMemo(() => getHumanTime(dateSunSet), [dateSunSet]);
 
   const removeFavorite = useCallback(() => dispatch(removeFromFavorite(city)), [dispatch, city, removeFromFavorite]);
 
-  const addFavorite = useCallback(() => dispatch(addToFavorite(city)), [dispatch, city, addToFavorite]);
+  const addFavorite = useCallback(() => addToFavorite(city), [dispatch, city, addToFavorite]);
 
   if (city && Object.keys(city).length) {
     return (
       <div className="single">
         <h2>{name}</h2>
-        <img src={`https://openweathermap.org/img/w/${weather[0].icon}.png`} alt="weather" />
+        <img src={getWeatherImage(weather[0].icon)} alt="weather" />
         <p style={{ textAlign: 'center' }}>{weather[0].description}</p>
         <Table striped bordered hover>
           <tbody>

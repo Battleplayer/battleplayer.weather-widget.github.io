@@ -3,10 +3,10 @@ import { actionTypes } from '../actions/LoadWeatherAction';
 const defaultState = {
   isRequestInProgress: false,
   error: false,
-  defaultCity: {},
-  searchedCity: {},
+  defaultCity: null,
+  searchedCity: null,
   cities: [],
-  forecast5city: {},
+  forecast5city: null,
 };
 
 const LoadWeatherReducer = (state = defaultState, { type = '', payload = {} }) => {

@@ -1,12 +1,10 @@
 import React, { memo, useEffect, useMemo } from 'react';
 import { useLocation, useParams, useRouteMatch, withRouter } from 'react-router-dom';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { Spinner } from 'react-bootstrap';
-import { bindActionCreators } from 'redux';
-// import { getForecastCity } from '../redux/actions/LoadWeatherAction';
 import Slider from 'react-slick';
+import getWeatherImage from 'helpers/weatherImage';
 import { getForecastCity } from '../api/CityInfo';
-import { useStore } from 'react-redux';
 
 const ForecastCity = memo((props) => {
   const settings = useMemo(
@@ -20,11 +18,11 @@ const ForecastCity = memo((props) => {
     []
   );
 
-  const { forecast5city } = useStore().getState();
+  const forecast5city = useSelector((state) => state.forecast5city);
 
   const dispatch = useDispatch();
   const aa = useLocation();
-  console.log(aa);
+  // console.log(aa);
 
   // useEffect(() => dispatch(getForecastCity(id)), [id]);
 
@@ -37,7 +35,7 @@ const ForecastCity = memo((props) => {
             <div key={city.dt} className="forecast__item">
               <h4>{new Date(city.dt * 1000).toLocaleString().replace(/:[^:]*$/, '')}</h4>
               <h5>{(city.main.temp - 273.15).toFixed(0)}&#8451;</h5>
-              <img src={`{REACT_WEATHER_IMG_URL${city.weather[0].icon}.png`} alt="weather" />
+              <img src={getWeatherImage(city.weather[0].icon)} alt="weather" />
               <p>{city.weather[0].description}</p>
             </div>
           ))}

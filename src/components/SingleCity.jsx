@@ -22,7 +22,7 @@ const SingleCity = memo((props) => {
 
   const removeFavorite = useCallback(() => dispatch(removeFromFavorite(city)), [dispatch, city, removeFromFavorite]);
 
-  const addFavorite = useCallback(() => addToFavorite(city), [dispatch, city, addToFavorite]);
+  const addFavorite = useCallback(() => addToFavorite(city), [city, addToFavorite]);
 
   if (city && Object.keys(city).length) {
     return (

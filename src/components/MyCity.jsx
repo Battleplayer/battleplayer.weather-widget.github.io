@@ -5,7 +5,7 @@ import getWeatherImage from 'helpers/weatherImage';
 import getHumanTime from 'helpers/humanTime';
 import { addToFavorite, removeFromFavorite } from 'redux/actions/LoadWeatherAction';
 
-const MyCity = memo((props) => {
+const MyCity = memo(() => {
   const dispatch = useDispatch();
 
   const myCity = useSelector((state) => state.defaultCity);
@@ -21,17 +21,14 @@ const MyCity = memo((props) => {
   const sunRise = useMemo(() => getHumanTime(dateSunRise), [dateSunRise]);
   const sunSet = useMemo(() => getHumanTime(dateSunSet), [dateSunSet]);
 
-  const removeFavorite = useCallback(
-    () => dispatch(removeFromFavorite(myCity)),
-    [dispatch, myCity, removeFromFavorite]
-  );
+  const removeFavorite = useCallback(() => dispatch(removeFromFavorite(myCity)), [dispatch, myCity]);
 
-  const canRemove = useMemo(() => cities.findIndex((el) => el.id === id) > 0, [cities]);
+  const canRemove = useMemo(() => cities.findIndex((el) => el.id === id) > 0, [cities, id]);
 
   const addFavorite = useCallback(() => {
     if (cities.findIndex((el) => el.id === id) > 0) return;
     dispatch(addToFavorite(myCity));
-  }, [dispatch, myCity, addToFavorite]);
+  }, [cities, dispatch, myCity, id]);
 
   const getDirection = useCallback((direction) => {
     switch (true) {
@@ -46,7 +43,7 @@ const MyCity = memo((props) => {
       default:
         return 'Checking';
     }
-  });
+  }, []);
 
   if (myCity) {
     return (
@@ -81,7 +78,9 @@ const MyCity = memo((props) => {
             {coord.lat} {coord.lon}
           </span>
         </div>
-        <Button variant="dark">Forecast for 5 days</Button>
+        <Button variant="dark" className="mb-3 mt-3">
+          Forecast for 5 days
+        </Button>
         {canRemove ? (
           <Button variant="danger" onClick={removeFavorite}>
             Remove from favorite

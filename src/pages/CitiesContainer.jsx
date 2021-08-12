@@ -20,7 +20,6 @@ const CitiesContainer = memo(() => {
   const error = useSelector((state) => state.error);
   const searchedCity = useSelector((state) => state.searchedCity);
   const cities = useSelector((state) => state.cities);
-  const forecast5city = useSelector((state) => state.forecast5city);
 
   const displayLocationInfo = (position) => {
     setLng(position.coords.longitude.toFixed(2));
@@ -36,7 +35,7 @@ const CitiesContainer = memo(() => {
       dispatch(getDefaultCity(lat, lng));
       setDefaultCity(myCity);
     }
-  }, [lat, lng]);
+  }, [defaultCity, dispatch, isRequestInProgress, lat, lng, myCity]);
 
   const pushToArray = (city) => {
     let arr = cities;

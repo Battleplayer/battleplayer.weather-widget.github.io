@@ -3,7 +3,7 @@ import { Button, Form, FormControl, Navbar } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { getSearchedCity } from 'api/CityInfo';
 
-const NavMenu = memo((props) => {
+const NavMenu = memo(() => {
   const [searchCity, setSearchCity] = useState('');
   const dispatch = useDispatch();
 

@@ -1,17 +1,25 @@
 import React, { Fragment, memo, useCallback, useMemo } from 'react';
 import { Button, Spinner, Table } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
 import getWeatherImage from 'helpers/weatherImage';
 import getHumanTime from 'helpers/humanTime';
+import { removeFromFavorite } from 'modules/citiesModule/actions';
+import { getForecastCity } from 'api/CityInfo';
 
 const SingleCity = memo((props) => {
-  const { city, addToFavorite, removeFromFavorite } = props;
+  const { city, addToFavorite, canRemove } = props;
 
   const dispatch = useDispatch();
 
-  const { sys, main, wind, coord, id, weather, name } = city;
-  const { country, sunrise, sunset } = sys;
+  const {
+    sys: { country, sunrise, sunset },
+    main,
+    wind,
+    coord,
+    id,
+    weather,
+    name,
+  } = city;
 
   const dateSunRise = useMemo(() => new Date(sunrise * 1000), [sunrise]);
   const dateSunSet = useMemo(() => new Date(sunset * 1000), [sunset]);
@@ -23,6 +31,8 @@ const SingleCity = memo((props) => {
   const removeFavorite = useCallback(() => dispatch(removeFromFavorite(city)), [dispatch, city, removeFromFavorite]);
 
   const addFavorite = useCallback(() => addToFavorite(city), [city, addToFavorite]);
+
+  const getForecast = useCallback(() => dispatch(getForecastCity(id)), [id]);
 
   if (city && Object.keys(city).length) {
     return (
@@ -79,13 +89,18 @@ const SingleCity = memo((props) => {
             </tr>
           </tbody>
         </Table>
-        <Link to={`${id}`}>
-          <Button variant="dark">Forecast for 5 days</Button>
-        </Link>
-        {addToFavorite && <Button onClick={addFavorite}>Add to favorite</Button>}
-        {removeFromFavorite && (
-          <Button variant="danger" onClick={removeFavorite}>
+
+        <Button onClick={getForecast} variant="dark" className="mb-3">
+          Forecast for 5 days
+        </Button>
+
+        {canRemove ? (
+          <Button variant="danger" onClick={removeFavorite} className="mb-3">
             Remove from favorite
+          </Button>
+        ) : (
+          <Button onClick={addFavorite} className="mb-3">
+            Add to favorite
           </Button>
         )}
       </div>

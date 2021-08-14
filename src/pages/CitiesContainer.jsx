@@ -1,11 +1,12 @@
-import React, { useState, useEffect, memo, Fragment } from 'react';
+import React, { useState, useEffect, memo, Fragment, useCallback } from 'react';
 import { Container, Row, Alert, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDefaultCity } from 'api/CityInfo';
-import { addToFavorite } from '../redux/actions/LoadWeatherAction';
+
 import ForecastCity from 'components/ForecastCity';
 import SingleCity from 'components/SingleCity';
-import MyCity from 'components/MyCity';
+import DefaultCity from 'components/defaultCity';
+import { addToFavorite } from 'modules/citiesModule/actions';
 
 const CitiesContainer = memo(() => {
   const [lng, setLng] = useState('');
@@ -15,27 +16,27 @@ const CitiesContainer = memo(() => {
 
   const dispatch = useDispatch();
 
-  const myCity = useSelector((state) => state.defaultCity);
-  const isRequestInProgress = useSelector((state) => state.isRequestInProgress);
-  const error = useSelector((state) => state.error);
-  const searchedCity = useSelector((state) => state.searchedCity);
-  const cities = useSelector((state) => state.cities);
+  const myCity = useSelector((state) => state.defaultCity.defaultCity);
 
-  const displayLocationInfo = (position) => {
+  const error = useSelector((state) => state.savedCities.error);
+  const searchedCity = useSelector((state) => state.savedCities.searchedCity);
+  const cities = useSelector((state) => state.savedCities.cities);
+
+  const displayLocationInfo = useCallback((position) => {
     setLng(position.coords.longitude.toFixed(2));
     setLat(position.coords.latitude.toFixed(2));
-  };
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(displayLocationInfo);
   }, []);
 
   useEffect(() => {
-    if (!isRequestInProgress && lat && lng && !defaultCity) {
+    navigator.geolocation.getCurrentPosition(displayLocationInfo);
+  }, [displayLocationInfo]);
+
+  useEffect(() => {
+    if (lat && lng && !defaultCity) {
       dispatch(getDefaultCity(lat, lng));
       setDefaultCity(myCity);
     }
-  }, [defaultCity, dispatch, isRequestInProgress, lat, lng, myCity]);
+  }, [defaultCity, dispatch, lat, lng, myCity]);
 
   const pushToArray = (city) => {
     let arr = cities;
@@ -66,21 +67,23 @@ const CitiesContainer = memo(() => {
             </Alert>
           )}
         </Row>
-        <Row>
-          <Col>
-            <MyCity />
-          </Col>
-        </Row>
+        {myCity && (
+          <Row>
+            <Col>
+              <DefaultCity />
+            </Col>
+          </Row>
+        )}
       </Container>
 
       <Container>
         <Row>
-          {Object.keys(searchedCity).length ? (
+          {searchedCity && (
             <Col>
               <h2>Searched city</h2>
               <SingleCity city={searchedCity} addToFavorite={pushToArray} />
             </Col>
-          ) : null}
+          )}
         </Row>
 
         {cities.length > 0 && (
@@ -88,17 +91,17 @@ const CitiesContainer = memo(() => {
             <Col md={12}>
               <h2>Favorite cities</h2>
             </Col>
-            {cities.map((city) => (
-              <Col md={4} key={city.id}>
-                <SingleCity city={city} />
-              </Col>
-            ))}
+            <div className="cities-list">
+              {cities.map((city) => (
+                <Col md={4} key={city.id}>
+                  <SingleCity city={city} canRemove />
+                </Col>
+              ))}
+            </div>
           </Row>
         )}
 
-        <Col md={12}>
-          <ForecastCity />
-        </Col>
+        <ForecastCity />
       </Container>
     </Fragment>
   );

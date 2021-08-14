@@ -1,14 +1,15 @@
+import { requestSearchCity, requestSearchCityError, requestSearchCitySuccess } from 'modules/citiesModule/actions';
 import {
   requestDefaultCity,
   requestDefaultCityError,
   requestDefaultCitySuccess,
+} from 'modules/defaultCityModule/actions';
+import {
   requestForecast5City,
   requestForecast5CityError,
   requestForecast5CitySuccess,
-  requestSearchCity,
-  requestSearchCityError,
-  requestSearchCitySuccess,
-} from 'redux/actions/LoadWeatherAction';
+} from 'modules/forecast5DaysModule/actions';
+
 import Api from './Api';
 
 export const getDefaultCity = (lat, lng) => async (dispatch) => {
@@ -20,7 +21,6 @@ export const getDefaultCity = (lat, lng) => async (dispatch) => {
     })
     .catch(({ message }) => {
       dispatch(requestDefaultCityError(message));
-      console.log(message);
     });
 };
 

@@ -1,39 +1,43 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo } from 'react';
 import { useSelector } from 'react-redux';
-
-import Slider from 'react-slick';
-import getWeatherImage from 'helpers/weatherImage';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Spinner, Col } from 'react-bootstrap';
+import { weatherData } from 'modules/forecast5DaysModule/reselect';
 
 const ForecastCity = memo(() => {
-  const settings = useMemo(
-    () => ({
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 6,
-      slidesToScroll: 5,
-    }),
-    []
-  );
+  const forecast5city = useSelector((state) => state.forecastCity.forecast5city);
+  const state = useSelector((state) => state);
+  const isRequestInProgress = useSelector((state) => state.forecastCity.isRequestInProgress);
+  const data = weatherData(state);
 
-  const forecast5city = useSelector((state) => state.forecast5city);
+  if (isRequestInProgress) return <Spinner animation="grow" />;
 
   if (!forecast5city) return null;
 
   return (
-    <div>
+    <Col md={12}>
       <h2>Forecast for 5 day for city {forecast5city.city.name}</h2>
-      <Slider {...settings} className="forecast">
-        {forecast5city.list.map((city) => (
-          <div key={city.dt} className="forecast__item">
-            <h4>{new Date(city.dt * 1000).toLocaleString().replace(/:[^:]*$/, '')}</h4>
-            <h5>{(city.main.temp - 273.15).toFixed(0)}&#8451;</h5>
-            <img src={getWeatherImage(city.weather[0].icon)} alt="weather" />
-            <p>{city.weather[0].description}</p>
-          </div>
-        ))}
-      </Slider>
-    </div>
+      <ResponsiveContainer width="100%" aspect={2.5} height="300px">
+        <LineChart
+          width={1500}
+          height={300}
+          data={data}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          {/* <Legend /> */}
+          <Line type="monotone" dataKey="temp" stroke="red" activeDot={{ r: 5 }} />
+        </LineChart>
+      </ResponsiveContainer>
+    </Col>
   );
 });
 

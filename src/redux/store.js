@@ -1,8 +1,10 @@
-import { createStore, compose, applyMiddleware } from 'redux';
+import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import citiesState from './reducers/LoadWeatherReducer';
+import CitiesReducer from 'modules/citiesModule/reducer';
+import Forecast5DaysReducer from 'modules/forecast5DaysModule/reducer';
+import defaultCityReducer from 'modules/defaultCityModule/reducer';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -11,7 +13,13 @@ const persistConfig = {
   storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, citiesState);
+const rootReducer = combineReducers({
+  savedCities: CitiesReducer,
+  defaultCity: defaultCityReducer,
+  forecastCity: Forecast5DaysReducer,
+});
 
-export let store = createStore(persistedReducer, composeEnhancer(applyMiddleware(thunk)));
-export let persistor = persistStore(store);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = createStore(persistedReducer, composeEnhancer(applyMiddleware(thunk)));
+export const persistor = persistStore(store);

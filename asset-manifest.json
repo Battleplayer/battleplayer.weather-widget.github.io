@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/battleplayer.weather-widget.github.io/static/css/main.229e0c95.chunk.css",
-    "main.js": "/battleplayer.weather-widget.github.io/static/js/main.d66d921c.chunk.js",
-    "main.js.map": "/battleplayer.weather-widget.github.io/static/js/main.d66d921c.chunk.js.map",
-    "runtime-main.js": "/battleplayer.weather-widget.github.io/static/js/runtime-main.01ff1781.js",
-    "runtime-main.js.map": "/battleplayer.weather-widget.github.io/static/js/runtime-main.01ff1781.js.map",
-    "static/css/2.7b042443.chunk.css": "/battleplayer.weather-widget.github.io/static/css/2.7b042443.chunk.css",
-    "static/js/2.cd80e227.chunk.js": "/battleplayer.weather-widget.github.io/static/js/2.cd80e227.chunk.js",
-    "static/js/2.cd80e227.chunk.js.map": "/battleplayer.weather-widget.github.io/static/js/2.cd80e227.chunk.js.map",
-    "index.html": "/battleplayer.weather-widget.github.io/index.html",
-    "static/css/2.7b042443.chunk.css.map": "/battleplayer.weather-widget.github.io/static/css/2.7b042443.chunk.css.map",
-    "static/css/main.229e0c95.chunk.css.map": "/battleplayer.weather-widget.github.io/static/css/main.229e0c95.chunk.css.map",
-    "static/js/2.cd80e227.chunk.js.LICENSE.txt": "/battleplayer.weather-widget.github.io/static/js/2.cd80e227.chunk.js.LICENSE.txt",
-    "static/media/index.scss": "/battleplayer.weather-widget.github.io/static/media/slick.c94f7671.ttf"
+    "main.css": "/static/css/main.229e0c95.chunk.css",
+    "main.js": "/static/js/main.d66d921c.chunk.js",
+    "main.js.map": "/static/js/main.d66d921c.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.03792eba.js",
+    "runtime-main.js.map": "/static/js/runtime-main.03792eba.js.map",
+    "static/css/2.3bb274aa.chunk.css": "/static/css/2.3bb274aa.chunk.css",
+    "static/js/2.cd80e227.chunk.js": "/static/js/2.cd80e227.chunk.js",
+    "static/js/2.cd80e227.chunk.js.map": "/static/js/2.cd80e227.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.3bb274aa.chunk.css.map": "/static/css/2.3bb274aa.chunk.css.map",
+    "static/css/main.229e0c95.chunk.css.map": "/static/css/main.229e0c95.chunk.css.map",
+    "static/js/2.cd80e227.chunk.js.LICENSE.txt": "/static/js/2.cd80e227.chunk.js.LICENSE.txt",
+    "static/media/index.scss": "/static/media/slick.c94f7671.ttf"
   },
   "entrypoints": [
-    "static/js/runtime-main.01ff1781.js",
-    "static/css/2.7b042443.chunk.css",
+    "static/js/runtime-main.03792eba.js",
+    "static/css/2.3bb274aa.chunk.css",
     "static/js/2.cd80e227.chunk.js",
     "static/css/main.229e0c95.chunk.css",
     "static/js/main.d66d921c.chunk.js"

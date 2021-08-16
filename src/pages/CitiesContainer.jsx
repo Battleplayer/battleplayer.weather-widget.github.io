@@ -6,18 +6,15 @@ import { getDefaultCity } from 'api/CityInfo';
 import ForecastCity from 'components/ForecastCity';
 import SingleCity from 'components/SingleCity';
 import DefaultCity from 'components/defaultCity';
-import { addToFavorite } from 'modules/citiesModule/actions';
 
 const CitiesContainer = memo(() => {
   const [lng, setLng] = useState('');
   const [lat, setLat] = useState('');
   const [defaultCity, setDefaultCity] = useState(null);
-  const [isAdded, setIsAdded] = useState(false);
 
   const dispatch = useDispatch();
 
   const myCity = useSelector((state) => state.defaultCity.defaultCity);
-
   const error = useSelector((state) => state.savedCities.error);
   const searchedCity = useSelector((state) => state.savedCities.searchedCity);
   const cities = useSelector((state) => state.savedCities.cities);
@@ -38,25 +35,10 @@ const CitiesContainer = memo(() => {
     }
   }, [defaultCity, dispatch, lat, lng, myCity]);
 
-  const pushToArray = (city) => {
-    let arr = cities;
-    const index = arr.findIndex((e) => e.id === city.id);
-    if (index === -1) {
-      dispatch(addToFavorite(city));
-    } else {
-      arr[index] = city;
-      setIsAdded(true);
-      setTimeout(() => {
-        setIsAdded(false);
-      }, 4000);
-    }
-  };
-
   return (
     <Fragment>
       <Container fluid>
         <Row>
-          {isAdded && <Alert variant="success">This city has been already added to favorite!</Alert>}
           {error && (
             <Alert variant="danger">
               {error === 'Request failed with status code 401' && <span>Bad access key.</span>}
@@ -81,7 +63,7 @@ const CitiesContainer = memo(() => {
           {searchedCity && (
             <Col>
               <h2>Searched city</h2>
-              <SingleCity city={searchedCity} addToFavorite={pushToArray} />
+              <SingleCity city={searchedCity} />
             </Col>
           )}
         </Row>

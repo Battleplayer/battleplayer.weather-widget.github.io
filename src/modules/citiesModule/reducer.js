@@ -7,7 +7,7 @@ const defaultState = {
 };
 
 const CitiesReducer = (state = defaultState, { type = '', payload = {} }) => {
-  const { searchedCity, error, city, forecast5city } = payload;
+  const { searchedCity, error, city } = payload;
   switch (type) {
     case actionTypes.SEARCH_CITY_REQ_START:
       return {
@@ -30,7 +30,7 @@ const CitiesReducer = (state = defaultState, { type = '', payload = {} }) => {
     case actionTypes.ADD_TO_FAVORITE:
       return {
         ...state,
-        cities: [...state.cities, city],
+        cities: state.cities.findIndex((el) => el.id === city.id) > 0 ? state.cities : state.cities.concat(city),
       };
     case actionTypes.REMOVE_FROM_FAVORITE:
       return {

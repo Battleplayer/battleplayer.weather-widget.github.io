@@ -3,11 +3,11 @@ import { Button, Spinner, Table } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import getWeatherImage from 'helpers/weatherImage';
 import getHumanTime from 'helpers/humanTime';
-import { removeFromFavorite } from 'modules/citiesModule/actions';
+import { addToFavorite, removeFromFavorite } from 'modules/citiesModule/actions';
 import { getForecastCity } from 'api/CityInfo';
 
 const SingleCity = memo((props) => {
-  const { city, addToFavorite, canRemove } = props;
+  const { city, canRemove } = props;
 
   const dispatch = useDispatch();
 
@@ -24,17 +24,14 @@ const SingleCity = memo((props) => {
   const dateSunRise = useMemo(() => new Date(sunrise * 1000), [sunrise]);
   const dateSunSet = useMemo(() => new Date(sunset * 1000), [sunset]);
   const todayIs = useMemo(() => new Date().toLocaleDateString(), []);
-
   const sunRise = useMemo(() => getHumanTime(dateSunRise), [dateSunRise]);
   const sunSet = useMemo(() => getHumanTime(dateSunSet), [dateSunSet]);
 
-  const removeFavorite = useCallback(() => dispatch(removeFromFavorite(city)), [dispatch, city, removeFromFavorite]);
+  const removeFavorite = useCallback(() => dispatch(removeFromFavorite(city)), [dispatch, city]);
+  const addFavorite = useCallback(() => dispatch(addToFavorite(city)), [dispatch, city]);
+  const getForecast = useCallback(() => dispatch(getForecastCity(id)), [id, dispatch]);
 
-  const addFavorite = useCallback(() => addToFavorite(city), [city, addToFavorite]);
-
-  const getForecast = useCallback(() => dispatch(getForecastCity(id)), [id]);
-
-  if (city && Object.keys(city).length) {
+  if (city) {
     return (
       <div className="single">
         <h2>{name}</h2>

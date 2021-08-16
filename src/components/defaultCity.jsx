@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import getWeatherImage from 'helpers/weatherImage';
 import getHumanTime from 'helpers/humanTime';
 import { addToFavorite, removeFromFavorite } from 'modules/citiesModule/actions';
+import { getForecastCity } from 'api/CityInfo';
 
 const DefaultCity = memo(() => {
   const dispatch = useDispatch();
@@ -31,11 +32,9 @@ const DefaultCity = memo(() => {
   const removeFavorite = useCallback(() => dispatch(removeFromFavorite(myCity)), [dispatch, myCity]);
 
   const canRemove = useMemo(() => cities.findIndex((el) => el.id === id) > 0, [cities, id]);
+  const getForecast = useCallback(() => dispatch(getForecastCity(id)), [id, dispatch]);
 
-  const addFavorite = useCallback(() => {
-    if (cities.findIndex((el) => el.id === id) > 0) return;
-    dispatch(addToFavorite(myCity));
-  }, [cities, dispatch, myCity, id]);
+  const addFavorite = useCallback(() => dispatch(addToFavorite(myCity)), [dispatch, myCity]);
 
   const getDirection = useCallback((direction) => {
     switch (true) {
@@ -53,6 +52,7 @@ const DefaultCity = memo(() => {
   }, []);
 
   if (!myCity) return <Spinner animation="grow" />;
+
   return (
     <div className="my-city">
       <h2>Weather in your city: {name}</h2>
@@ -85,7 +85,7 @@ const DefaultCity = memo(() => {
           {coord.lat} {coord.lon}
         </span>
       </div>
-      <Button variant="dark" className="mb-3 mt-3">
+      <Button variant="dark" className="mb-3 mt-3" onClick={getForecast}>
         Forecast for 5 days
       </Button>
       {canRemove ? (

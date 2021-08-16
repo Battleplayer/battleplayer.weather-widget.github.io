@@ -2,13 +2,12 @@ import React, { memo } from 'react';
 import { useSelector } from 'react-redux';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Spinner, Col } from 'react-bootstrap';
-import { weatherData } from 'modules/forecast5DaysModule/reselect';
+import { weatherData } from '../modules/forecast5DaysModule/selectors';
 
 const ForecastCity = memo(() => {
   const forecast5city = useSelector((state) => state.forecastCity.forecast5city);
-  const state = useSelector((state) => state);
+  const data = useSelector(weatherData);
   const isRequestInProgress = useSelector((state) => state.forecastCity.isRequestInProgress);
-  const data = weatherData(state);
 
   if (isRequestInProgress) return <Spinner animation="grow" />;
 

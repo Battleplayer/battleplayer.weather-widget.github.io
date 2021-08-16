@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-const list = (state) => state.forecastCity?.forecast5city?.list;
+const list = (state) => state.forecastCity?.forecast5city?.list || [];
 
 export const weatherData = createSelector(list, (items) =>
   items.map((item) => ({
